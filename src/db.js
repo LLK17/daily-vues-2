@@ -12,6 +12,9 @@ const firebaseApp = firebase.initializeApp({
     measurementId: "G-BW9NC616S7"
   });
 
-  const db= firebaseApp.firestore()
+  const db = firebaseApp.firestore()
+  db.settings({
+    ignoreUndefinedProperties: true,
+  })
 
   export { db }
