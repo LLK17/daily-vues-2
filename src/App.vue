@@ -1,19 +1,35 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <form @submit.prevent="newItem">
+      <input id="titleField" type="text" name="title" placeholder ="Give Me A Title!">
+      <br>
+      <textarea id="descriptionField" maxlength="100" name="description" placeholder="Describe Me"></textarea>
+      <p>Categories</p>
+      <input type="radio" name="Health"> Health
+      <input type="radio" name="Fun"> Fun
+      <input type="radio" name="Work"> Work
+      <input type="radio" name="School"> School
+    </form>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+// import { db } from './db'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    
+  },
+
+
+  newItem(){
+    console.log("hi")
+  },
 }
+
 </script>
 
 <style>
@@ -25,4 +41,14 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+#titleField{
+  margin-bottom: 1em;
+}
+
+#descriptionField{
+height: 6em;
+resize: none;
+}
+
 </style>
