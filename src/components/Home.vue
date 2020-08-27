@@ -1,5 +1,6 @@
 <template>
     <div>
+        <navbar></navbar>
         <form id="new-item-form" @submit.prevent="newItem">
             <input id="title-field" type="text" maxlength="25" name="title" placeholder ="Give Me A Title!" v-model="formData.title">
             <textarea id="description-field" maxlength="100" name="description" placeholder="Describe Me" v-model="formData.description"></textarea>
@@ -38,15 +39,23 @@
 </template>
 
 <script>
+// database reference
 import { db } from '../db'
+import Navbar from './Navbar'
+import * as firebase from "firebase/app"
+import "firebase/auth"
+
 export default{
-    name: 'Home',
+    components: {
+        Navbar
+    },
 
     data(){
     return{
       toDoLists: null,
       formData: {},
       state: 'loading',
+      user: ''
     }
   },
 
@@ -59,6 +68,7 @@ export default{
   methods:{
     // adds a new item to the to do list
     async newItem() {
+        let user = firebase.auth().currentUser
         db.collection('lists').add({
           title: this.formData.title,
           description: this.formData.description,
@@ -67,6 +77,7 @@ export default{
           work: this.formData.work,
           school: this.formData.school,
           dueDate: this.formData.dueDate,
+          madeBy: user.uid,
           }).catch(function(error){
         this.errorMessage = JSON.stringify(error)
         this.state = 'error'
