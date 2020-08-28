@@ -55,33 +55,42 @@ export default{
       toDoLists: null,
       formData: {},
       state: 'loading',
-      user: ''
     }
   },
 
   firestore(){
-    return{
-      toDoLists: db.collection('lists'),
-    }
+    firebase.auth().onAuthStateChanged(function(user){
+        console.log('bang')
+        if (user){
+            return{
+                toDoLists: db.collection('lists').where("madeBy", "==", user.uid).get()
+            }
+        }
+        else{
+            console.log('User Not Found')
+        }
+    })
   },
 
   methods:{
-    // adds a new item to the to do list
+
+   // adds a new item to the to do list
     async newItem() {
-        let user = firebase.auth().currentUser
-        db.collection('lists').add({
-          title: this.formData.title,
-          description: this.formData.description,
-          health: this.formData.health,
-          fun: this.formData.fun,
-          work: this.formData.work,
-          school: this.formData.school,
-          dueDate: this.formData.dueDate,
-          madeBy: user.uid,
-          }).catch(function(error){
-        this.errorMessage = JSON.stringify(error)
-        this.state = 'error'
-      })
+        try{
+            let user = firebase.auth().currentUser
+            db.collection('lists').add({
+            title: this.formData.title,
+            description: this.formData.description,
+            health: this.formData.health,
+            fun: this.formData.fun,
+            work: this.formData.work,
+            school: this.formData.school,
+            dueDate: this.formData.dueDate,
+            madeBy: user.uid,
+          })
+        }catch(error){
+            console.log(error)
+        }
     },
 
     //removes an item from the to do list
