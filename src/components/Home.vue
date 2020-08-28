@@ -19,7 +19,7 @@
             <!-- list display -->
             <h3>My List</h3>
             <div id="my-list">
-            <div id="list-item" v-for="(listData) in toDoLists" :key='listData.id'>
+            <div id="list-item" v-for="(listData) in myList" :key='listData.id'>
                 {{listData.title}}
                 <br>
                 {{listData.description}}
@@ -45,6 +45,8 @@ import Navbar from './Navbar'
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
+const toDoLists = db.collection('lists')
+
 export default{
     components: {
         Navbar
@@ -52,25 +54,21 @@ export default{
 
     data(){
     return{
-      toDoLists: null,
+      myList: [],
       formData: {},
-      state: 'loading',
+      user: []
     }
   },
 
-  firestore(){
-    firebase.auth().onAuthStateChanged(function(user){
-        console.log('bang')
-        if (user){
-            return{
-                toDoLists: db.collection('lists').where("madeBy", "==", user.uid).get()
-            }
-        }
-        else{
-            console.log('User Not Found')
-        }
-    })
-  },
+    firestore(){
+        //grabs items that the current user authored from firebase
+        let user = firebase.auth().currentUser
+        console.log('E')
+        return{
+             myList: toDoLists.where("madeBy", "==", user.uid)
+         }
+
+    },
 
   methods:{
 
