@@ -53,18 +53,18 @@
 
 <style scoped>
     #nav{
-       width: 100vw;
+       width: 100%;
        height: 4em;
        display: grid;
        justify-items: right;
        align-items: center;
-       background-color:darkgray;
+       background-color: #4ff0a7;
        position: fixed;
        top: 0
     }
     
     #links{
-        margin-right: 1em;
+        margin-right: 4em;
     }
 
     .link{
