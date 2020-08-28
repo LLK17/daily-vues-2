@@ -19,7 +19,7 @@
             <!-- list display -->
             <h3>My List</h3>
             <div id="my-list">
-            <div id="list-item" v-for="(listData) in toDoLists" :key='listData.id'>
+            <div id="list-item" v-for="(listData) in myList" :key='listData.id'>
                 {{listData.title}}
                 <br>
                 {{listData.description}}
@@ -45,6 +45,8 @@ import Navbar from './Navbar'
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
+const toDoLists = db.collection('lists')
+
 export default{
     components: {
         Navbar
@@ -52,36 +54,41 @@ export default{
 
     data(){
     return{
-      toDoLists: null,
+      myList: [],
       formData: {},
-      state: 'loading',
-      user: ''
+      user: []
     }
   },
 
-  firestore(){
-    return{
-      toDoLists: db.collection('lists'),
-    }
-  },
+    firestore(){
+        //grabs items that the current user authored from firebase
+        let user = firebase.auth().currentUser
+        console.log('E')
+        return{
+             myList: toDoLists.where("madeBy", "==", user.uid)
+         }
+
+    },
 
   methods:{
-    // adds a new item to the to do list
+
+   // adds a new item to the to do list
     async newItem() {
-        let user = firebase.auth().currentUser
-        db.collection('lists').add({
-          title: this.formData.title,
-          description: this.formData.description,
-          health: this.formData.health,
-          fun: this.formData.fun,
-          work: this.formData.work,
-          school: this.formData.school,
-          dueDate: this.formData.dueDate,
-          madeBy: user.uid,
-          }).catch(function(error){
-        this.errorMessage = JSON.stringify(error)
-        this.state = 'error'
-      })
+        try{
+            let user = firebase.auth().currentUser
+            db.collection('lists').add({
+            title: this.formData.title,
+            description: this.formData.description,
+            health: this.formData.health,
+            fun: this.formData.fun,
+            work: this.formData.work,
+            school: this.formData.school,
+            dueDate: this.formData.dueDate,
+            madeBy: user.uid,
+          })
+        }catch(error){
+            console.log(error)
+        }
     },
 
     //removes an item from the to do list

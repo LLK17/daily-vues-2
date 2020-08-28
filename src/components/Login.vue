@@ -33,6 +33,7 @@ import "firebase/auth"
         },
 
         methods:{
+            //logs user in
              async logIn(){
                 try{
                     const val = await firebase.auth().signInWithEmailAndPassword(this.email, this.password)

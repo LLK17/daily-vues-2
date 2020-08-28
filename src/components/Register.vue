@@ -33,6 +33,7 @@ import "firebase/auth"
         },
 
         methods:{
+            //creates a new user
             async registerUser(){
                 try{
                     const user = firebase.auth().createUserWithEmailAndPassword(this.email, this.password)

@@ -22,6 +22,7 @@
             }
         },
         methods:{
+            //signs user out when clicked
             async signOut(){
                 try{
                     await firebase.auth().signOut()
