@@ -32,4 +32,11 @@ export default {
    margin: 0;
  }
 
+ button{
+   background-color: #4ff0a7;
+   border: none;
+   padding: .6em;
+   cursor: pointer;
+ }
+
 </style>
