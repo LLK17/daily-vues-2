@@ -16,6 +16,14 @@
                     <input type="date" name="Due Date" v-model="formData.dueDate">
                     <button type="submit">Submit!</button>
                 </form>
+                <h4>Filters</h4>
+                <form id="filters" @submit.prevent="runFilter">
+                    <input type="radio" name="Health" v-model="filter.health" value="Health"> Health
+                    <input type="radio" name="Fun" v-model="filter.fun" value="Fun"> Fun
+                    <input type="radio" name="Work" v-model="filter.work" value="Work"> Work
+                    <input type="radio" name="School" v-model="filter.school" value="School"> School
+                    <button type="submit">Fitler!</button>
+                </form>
             </div>
 
                 <!-- list display -->
@@ -60,7 +68,8 @@ export default{
     return{
       myList: [],
       formData: {},
-      user: []
+      filter: {},
+      user: [],
     }
   },
 
@@ -74,6 +83,20 @@ export default{
     },
 
   methods:{
+
+    //Item filtering
+    runFilter(){
+        try{
+            console.log('hi')
+            // return{
+    
+            // }
+
+        }catch(error){
+            console.log(error)
+        }
+    },
+
 
    // adds a new item to the to do list
     async newItem() {
