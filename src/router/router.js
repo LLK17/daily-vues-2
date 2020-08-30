@@ -4,8 +4,7 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Home from '../components/Home'
 import splashPage from '../components/SplashPage'
-// import * as firebase from "firebase/app"
-// import "firebase/auth"
+
 
 Vue.use(Router)
 
@@ -18,7 +17,6 @@ Vue.use(Router)
             path: '/home',
             name: 'home',
             component: Home,
-            // meta: {requiresAuth: true}
         },
 
         {
@@ -41,20 +39,6 @@ Vue.use(Router)
     ]
     
 })
-
-
-    // router.beforeEach((to, from, next)=>{
-    //     try{
-    //         const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-    //         const isAuthenticated = firebase.auth().currentUser
-    //         if(requiresAuth && !isAuthenticated){
-    //             next("/login")
-    //         }
-    //     }catch(error){
-    //         console.log(error)
-    //     }
-    // })
-
 
 export default router
 
