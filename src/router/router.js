@@ -3,8 +3,9 @@ import Router from 'vue-router'
 import Login from '../components/Login'
 import Register from '../components/Register'
 import Home from '../components/Home'
-import * as firebase from "firebase/app"
-import "firebase/auth"
+import splashPage from '../components/SplashPage'
+// import * as firebase from "firebase/app"
+// import "firebase/auth"
 
 Vue.use(Router)
 
@@ -14,9 +15,10 @@ Vue.use(Router)
     routes: [
 
         {
-            path: '/',
+            path: '/home',
             name: 'home',
             component: Home,
+            // meta: {requiresAuth: true}
         },
 
         {
@@ -30,26 +32,28 @@ Vue.use(Router)
             name: 'register',
             component: Register,
         },
+        {
+            path:'*',
+            name: 'catchAll',
+            component: splashPage
+        }
 
     ]
     
 })
 
 
-    router.beforeEach((to, from, next)=>{
-        try{
-            const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-            const isAuthenticated = firebase.auth().currentUser
-            if(requiresAuth && !isAuthenticated){
-                next("/login")
-            }
-            else{
-                next()
-            }
-        }catch(error){
-            console.log(error)
-        }
-    })
+    // router.beforeEach((to, from, next)=>{
+    //     try{
+    //         const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+    //         const isAuthenticated = firebase.auth().currentUser
+    //         if(requiresAuth && !isAuthenticated){
+    //             next("/login")
+    //         }
+    //     }catch(error){
+    //         console.log(error)
+    //     }
+    // })
 
 
 export default router
