@@ -31,7 +31,7 @@
                     <h3>My List</h3>
                     <div id="my-list">
                         <div id="list-item" v-for="(listData) in myList" :key='listData.id'>
-                            <span class="title">{{listData.title}}</span>
+                            <span class="title">{{listData.title}}</span> <span class="completion-marker" v-show="listData.completion !== null">(Done!)</span>
                             <br>
                             <p class="description">{{listData.description}}</p>
                             <br>
@@ -42,7 +42,10 @@
                             <br>
                             <span class="category">Due: {{listData.dueDate}}</span>
                             <br>
-                            <button v-on:click="deleteItem(listData.id)">Delete Item</button>
+                            <button v-show="listData.completion == null" v-on:click="complete(listData.id)">Complete!</button>
+                            <button v-show="listData.completion !== null" v-on:click="unComplete(listData.id)">Undo Complete</button>
+                            <br>
+                            <button id="delete" v-on:click="deleteItem(listData.id)">Delete Item</button>
                         </div>
                     </div>
                 </div>
@@ -58,7 +61,6 @@ import * as firebase from "firebase/app"
 import "firebase/auth"
 
 const toDoLists = db.collection('lists')
-// let user = firebase.auth.currentUser
 
 export default{
     components: {
@@ -66,13 +68,18 @@ export default{
     },
 
     data(){
-    return{
-      myList: [],
-      formData: {},
-      filter: [],
-      user: [],
-    }
-  },
+        return{
+            myList: [],
+            formData: {},
+            done: [],
+            filter: [],
+            user: [],
+            showHealth: true,
+            showFun: true,
+            showWork: true,
+            showSchool:true,
+            }
+    },
 
     //grabs items that the current user authored from firebase
 
@@ -103,13 +110,6 @@ export default{
         }
     },
 
-    // computed(){
-    //     myList: async () =>{
-    //         await this.grab() 
-    //         return this.toDoLists.where("madeBy", "==", user.uid)
-    //     }
-    // },
-
     methods:{
 
         //Item filtering
@@ -125,17 +125,6 @@ export default{
             }
         },
 
-        // grab(){
-        //     return new Promise((resolve,reject) => {
-                
-        //         firebase.auth().onAuthStateChanged(user=>{
-        //             console.log(user.email)
-        //         resolve()
-        //         reject()
-        //         })
-        //     })
-        // },
-
     // adds a new item to the to do list
         async newItem() {
             try{
@@ -149,6 +138,7 @@ export default{
                 school: this.formData.school,
                 dueDate: this.formData.dueDate,
                 madeBy: user.uid,
+                completion: this.done.completion,
             })
             }catch(error){
                 console.log(error)
@@ -157,11 +147,33 @@ export default{
 
         //removes an item from the to do list
         async deleteItem(id){
-        db.collection('lists').doc(id).delete().then(function(){
-        }).catch(function(error){
-            console.error("Error removing document", error)
-        })
+            toDoLists.doc(id).delete().then(function(){
+            }).catch(function(error){
+                console.error("Error removing document", error)
+            })
         },
+
+        async complete(id){
+            try{
+                    toDoLists.doc(id).update({
+                        completion: 'Complete'
+                    })
+                    console.log(toDoLists.doc(id))
+                }catch(error){
+                console.log(error)
+            }
+        },
+
+        async unComplete(id){
+            try{
+                    toDoLists.doc(id).update({
+                        completion: null
+                    })
+                    console.log(toDoLists.doc(id))
+                }catch(error){
+                console.log(error)
+            }
+        }
 
   },
 }
@@ -182,15 +194,22 @@ export default{
     }
 
     #new-item-form{
-    width: 20em;
+    width: 100%;
     display: grid;
-    gird-template-rows: auto auto auto auto auto auto;
     gap: 1em 0;
     }
 
     .description{
         word-wrap: break-word;
         height: fit-content;
+    }
+    .title{
+        word-wrap: break-word;
+        height: fit-content;
+    }
+
+    .completion-marker{
+        color: #4ff0a7
     }
 
     #title-field{
@@ -207,7 +226,6 @@ export default{
     }
 
     #my-list{
-    align-self: bottom;
     justify-content: center;
     width: auto;
     display: grid;
@@ -216,11 +234,15 @@ export default{
     }
 
     #list-item{
-        width: 20em;
+        width: 16em;
         height: auto;
         background-color: #fafafa;
         border-radius: 8%;
-        padding: .5em;
+        padding: 1em;
+    }
+
+    #delete{
+        background-color: darkgrey;
     }
 
 </style>
