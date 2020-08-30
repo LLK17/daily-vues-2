@@ -1,12 +1,12 @@
 <template>
     <div id="nav">
-        <span id="site-name">Daily Vues 2(this one actually does stuff!)</span>
+        <router-link to="/"> <span id="site-name">Daily Vues 2(this one actually does stuff!)</span> </router-link>
         <div id="links">
-            <span v-if="loggedIn"> Welcome, {{user.email}} </span>
+            <span v-if="loggedIn"> Good To See You |</span>
             <router-link class="link" to="/home">Home</router-link>
             <router-link v-if="!loggedIn" class="link" to="/login">Login</router-link> 
             <router-link v-if="!loggedIn" class="link" to="register">Register</router-link>
-            <button @click="signOut">Sign Out</button> 
+            <button v-if="loggedIn" @click="signOut">Sign Out</button> 
         </div>
     </div>
 </template>
@@ -67,9 +67,10 @@
     }
     
     #site-name{
-        justify-self: left;
+        justify-self: left !important;
         margin-left: 2em;
         font-weight: 700;
+        text-decoration: none;
     }
 
     #links{

@@ -3,7 +3,7 @@
         <navbar></navbar>
         <div id="container">
             <img src="../assets/logo.png">
-            <h1>Daily Vues 2</h1>
+            <h1>Welcome!</h1>
 
         </div>
     </div>
