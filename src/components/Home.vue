@@ -30,7 +30,7 @@
                 <div id="list-container">
                     <h3>My List</h3>
                     <div id="my-list">
-                        <div id="list-item" v-for="(listData) in myList" :key='listData.id'>
+                        <div id="list-item" v-show="(showHealth == true || showFun == true || showWork == true || showSchool == true)" v-for="(listData) in myList" :key='listData.id'>
                             <span class="title">{{listData.title}}</span> <span class="completion-marker" v-show="listData.completion !== null">(Done!)</span>
                             <br>
                             <p class="description">{{listData.description}}</p>
@@ -115,10 +115,10 @@ export default{
         //Item filtering
         runFilter(){
             try{
-                console.log('hi')
-                // return{
+                // let showHealth = 
+                console.log()
         
-                // }
+                
 
             }catch(error){
                 console.log(error)
@@ -138,7 +138,7 @@ export default{
                 school: this.formData.school,
                 dueDate: this.formData.dueDate,
                 madeBy: user.uid,
-                completion: this.done.completion,
+                completion: null,
             })
             }catch(error){
                 console.log(error)
