@@ -9,15 +9,21 @@ Vue.config.productionTip = false
 
 Vue.use(firestorePlugin)
 
-let app
-firebase.auth().onAuthStateChanged(user => {
-  console.log(user.email)
-  if (!app){
-    app = 
-    
+firebase.auth().onAuthStateChanged(user =>{
+  if(user) {
+      console.log(user.email)
+      new Vue({
+        router,
+        render: h => h(App),
+      }).$mount("#app")
+    }
+  
+
+  else{
     new Vue({
       router,
       render: h => h(App),
     }).$mount("#app")
   }
+
 })

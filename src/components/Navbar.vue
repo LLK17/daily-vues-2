@@ -2,8 +2,8 @@
     <div id="nav">
         <span id="site-name">Daily Vues 2(this one actually does stuff!)</span>
         <div id="links">
-            <span v-if="loggedIn"> Welcome! </span>
-            <router-link v-if="!loggedIn" class="link" to="/">Home</router-link>
+            <span v-if="loggedIn"> Welcome, {{user.email}} </span>
+            <router-link class="link" to="/home">Home</router-link>
             <router-link v-if="!loggedIn" class="link" to="/login">Login</router-link> 
             <router-link v-if="!loggedIn" class="link" to="register">Register</router-link>
             <button @click="signOut">Sign Out</button> 
@@ -20,6 +20,7 @@
         data(){
             return{
                 loggedIn: false,
+                user: {}
             }
         },
         methods:{
@@ -44,7 +45,7 @@
                     }
                 }
                 else{
-                    this.loggedIn=false
+                    this.loggedIn = false
                 }
             })
         },

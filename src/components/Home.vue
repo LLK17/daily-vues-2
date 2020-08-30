@@ -58,6 +58,7 @@ import * as firebase from "firebase/app"
 import "firebase/auth"
 
 const toDoLists = db.collection('lists')
+// let user = firebase.auth.currentUser
 
 export default{
     components: {
@@ -68,62 +69,99 @@ export default{
     return{
       myList: [],
       formData: {},
-      filter: {},
+      filter: [],
       user: [],
     }
   },
 
+    //grabs items that the current user authored from firebase
+
+    mounted(){
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                return {
+                        myList: toDoLists.where("madeBy", "==", user.uid)
+                    }
+            }
+        })
+    },
+
+    updated(){
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                return {
+                        myList: toDoLists.where("madeBy", "==", user.uid)
+                    }
+            }
+        })      
+    },
+
     firestore(){
-        //grabs items that the current user authored from firebase
         let user = firebase.auth().currentUser
-        return{
-             myList: toDoLists.where("madeBy", "==", user.uid)
-         }
-
-    },
-
-  methods:{
-
-    //Item filtering
-    runFilter(){
-        try{
-            console.log('hi')
-            // return{
-    
-            // }
-
-        }catch(error){
-            console.log(error)
+        return {
+            myList: toDoLists.where("madeBy", "==", user.uid)
         }
     },
 
+    // computed(){
+    //     myList: async () =>{
+    //         await this.grab() 
+    //         return this.toDoLists.where("madeBy", "==", user.uid)
+    //     }
+    // },
 
-   // adds a new item to the to do list
-    async newItem() {
-        try{
-            let user = firebase.auth().currentUser
-            db.collection('lists').add({
-            title: this.formData.title,
-            description: this.formData.description,
-            health: this.formData.health,
-            fun: this.formData.fun,
-            work: this.formData.work,
-            school: this.formData.school,
-            dueDate: this.formData.dueDate,
-            madeBy: user.uid,
-          })
-        }catch(error){
-            console.log(error)
-        }
-    },
+    methods:{
 
-    //removes an item from the to do list
-    async deleteItem(id){
-      db.collection('lists').doc(id).delete().then(function(){
-      }).catch(function(error){
-        console.error("Error removing document", error)
-      })
-    },
+        //Item filtering
+        runFilter(){
+            try{
+                console.log('hi')
+                // return{
+        
+                // }
+
+            }catch(error){
+                console.log(error)
+            }
+        },
+
+        // grab(){
+        //     return new Promise((resolve,reject) => {
+                
+        //         firebase.auth().onAuthStateChanged(user=>{
+        //             console.log(user.email)
+        //         resolve()
+        //         reject()
+        //         })
+        //     })
+        // },
+
+    // adds a new item to the to do list
+        async newItem() {
+            try{
+                let user = firebase.auth().currentUser
+                db.collection('lists').add({
+                title: this.formData.title,
+                description: this.formData.description,
+                health: this.formData.health,
+                fun: this.formData.fun,
+                work: this.formData.work,
+                school: this.formData.school,
+                dueDate: this.formData.dueDate,
+                madeBy: user.uid,
+            })
+            }catch(error){
+                console.log(error)
+            }
+        },
+
+        //removes an item from the to do list
+        async deleteItem(id){
+        db.collection('lists').doc(id).delete().then(function(){
+        }).catch(function(error){
+            console.error("Error removing document", error)
+        })
+        },
 
   },
 }
