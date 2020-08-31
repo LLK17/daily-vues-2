@@ -17,7 +17,7 @@
                     <button type="submit">Submit!</button>
                 </form>
 
-                <form id="filters" @submit.prevent="runFilter">
+                <form id="filters" @submit.prevent="runFilter(listData)">
                     <p>Filters</p>
                     <input type="checkbox" name="Health" v-model="filter.health" value="Health"> Health
                     <input type="checkbox" name="Fun" v-model="filter.fun" value="Fun"> Fun
@@ -71,6 +71,7 @@ export default{
 
     data(){
         return{
+            listData: [],
             myList: [],
             formData: {},
             done: [],
@@ -115,30 +116,43 @@ export default{
 
         //Item filtering
         runFilter(){
+            //This is gross and I'm sorry but it works, tried using v-show for a while but wasn't getting what I wanted
             try{
+                //Grabs each list item and the desired filters entered by the user
                 let items = document.getElementsByClassName("list-item")
                 let input = this.filter
-                console.log(input.health)
                 items.forEach( element => {
-                    let categories=element.children[5, 6, 7, 8]
-                    console.log(categories)
-                    if(element.children.innerHTML == "Health" && input.health == true 
-                        // items.fun == !null && input.fun == true || 
-                        // items.work == !null && input.work == true || 
-                        // items.school == !null && input.school == true
+                    //Looks inside each list item and sets variables based on the indexes of the categories
+                    let health = element.childNodes[6]
+                    let fun = element.childNodes[7]
+                    let work = element.childNodes[8]
+                    let school = element.childNodes[9]
+                    console.log(school)
+
+                    //filtering logic
+                    if (input.health !== true ||
+                        input.fun !== true ||
+                        input.work !== true ||
+                        input.school !== true
                     ){
-                        element.classList.remove("hide")
-                        element.classList.add("show")
-                    }
-                    else{
-                        element.classList.remove("show")
                         element.classList.add("hide")
+                        if (input.health == true && health.innerText == "Health " ||
+                            input.fun == true && fun.innerText == "Fun " ||
+                            input.work == true && work.innerText == "Work " ||
+                            input.school == true && school.innerText == "School "
+                        ){
+                            if (element.classList.contains("hide")){
+                                element.classList.remove("hide")
+                            }
+                        } 
                     }
 
-                })
-                // return{
-                //     input
-                // }
+  
+
+                    else{
+                         element.classList.remove("hide")
+                    }
+            })
             }catch(error){
                 console.log(error)
             }
@@ -150,7 +164,6 @@ export default{
                 alert("Please select at least one category")
             }
             else{
-                console.log(this.formData.health)
                 try{
                     let user = firebase.auth().currentUser
                     db.collection('lists').add({
@@ -277,10 +290,6 @@ export default{
 
     .hide{
         display: none;
-    }
-
-    .show{
-        display: initial;
     }
 
     .compButton{
