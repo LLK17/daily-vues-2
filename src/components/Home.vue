@@ -3,17 +3,17 @@
         <navbar></navbar>
             <div id="sidebar">
                 <form id="new-item-form" @submit.prevent="newItem">
-                    <input id="title-field" type="text" maxlength="50" name="title" placeholder ="Give Me A Title!" v-model="formData.title">
-                    <textarea id="description-field" maxlength="150" name="description" placeholder="Describe Me" v-model="formData.description"></textarea>
+                    <input id="title-field" type="text" required maxlength="50" name="title" placeholder ="Give Me A Title!" v-model="formData.title">
+                    <textarea id="description-field" required maxlength="150" name="description" placeholder="Describe Me" v-model="formData.description"></textarea>
                     <div id="form-categories">
-                        <!-- Categories are used for filtering -->
+                        <!-- Item Categories -->
                         <p>Categories</p>
                         <input type="checkbox" name="Health" v-model="formData.health" value="Health"> Health
                         <input type="checkbox" name="Fun" v-model="formData.fun" value="Fun"> Fun
                         <input type="checkbox" name="Work" v-model="formData.work" value="Work"> Work
                         <input type="checkbox" name="School" v-model="formData.school" value="School"> School
                     </div>
-                    <input type="date" name="Due Date" v-model="formData.dueDate">
+                    <input type="date" required name="Due Date" v-model="formData.dueDate">
                     <button type="submit">Submit!</button>
                 </form>
 
@@ -31,15 +31,15 @@
                 <div id="list-container">
                     <h3>My List</h3>
                     <div id="my-list">
-                        <div id="list-item" v-for="(listData) in myList" :key='listData.id'>
+                        <div class="list-item" v-for="(listData) in myList" :key='listData.id'>
                             <span class="title">{{listData.title}}</span> <span class="completion-marker" v-show="listData.completion !== null">(Done!)</span>
                             <br>
                             <p class="description">{{listData.description}}</p>
                             <br>
-                            <span class="category" v-if="listData.health == 'Health'">{{listData.health}} </span>
-                            <span class="category" v-if="listData.fun == 'Fun'">{{listData.fun}} </span>
-                            <span class="category" v-if="listData.work == 'Work'">{{listData.work}} </span>
-                            <span class="category" v-if="listData.school == 'School'">{{listData.school}} </span>
+                            <span class="category" v-if="listData.health == true">Health </span>
+                            <span class="category" v-if="listData.fun == true">Fun </span>
+                            <span class="category" v-if="listData.work == true">Work </span>
+                            <span class="category" v-if="listData.school == true">School </span>
                             <br>
                             <span class="category">Due: {{listData.dueDate}}</span>
                             <br>
@@ -104,10 +104,6 @@ export default{
         })      
     },
 
-    // computed(){
-
-    // },
-
     firestore(){
         let user = firebase.auth().currentUser
         return {
@@ -120,11 +116,29 @@ export default{
         //Item filtering
         runFilter(){
             try{
+                let items = document.getElementsByClassName("list-item")
                 let input = this.filter
-                console.log(input)
-                return{
-                    input
-                }
+                console.log(input.health)
+                items.forEach( element => {
+                    let categories=element.children[5, 6, 7, 8]
+                    console.log(categories)
+                    if(element.children.innerHTML == "Health" && input.health == true 
+                        // items.fun == !null && input.fun == true || 
+                        // items.work == !null && input.work == true || 
+                        // items.school == !null && input.school == true
+                    ){
+                        element.classList.remove("hide")
+                        element.classList.add("show")
+                    }
+                    else{
+                        element.classList.remove("show")
+                        element.classList.add("hide")
+                    }
+
+                })
+                // return{
+                //     input
+                // }
             }catch(error){
                 console.log(error)
             }
@@ -132,21 +146,27 @@ export default{
 
     // adds a new item to the to do list
         async newItem() {
-            try{
-                let user = firebase.auth().currentUser
-                db.collection('lists').add({
-                title: this.formData.title,
-                description: this.formData.description,
-                health: this.formData.health,
-                fun: this.formData.fun,
-                work: this.formData.work,
-                school: this.formData.school,
-                dueDate: this.formData.dueDate,
-                madeBy: user.uid,
-                completion: null,
-            })
-            }catch(error){
-                console.log(error)
+            if(this.formData.health == null && this.formData.fun == null && this.formData.work == null && this.formData.school == null ){
+                alert("Please select at least one category")
+            }
+            else{
+                console.log(this.formData.health)
+                try{
+                    let user = firebase.auth().currentUser
+                    db.collection('lists').add({
+                    title: this.formData.title,
+                    description: this.formData.description,
+                    health: this.formData.health,
+                    fun: this.formData.fun,
+                    work: this.formData.work,
+                    school: this.formData.school,
+                    dueDate: this.formData.dueDate,
+                    madeBy: user.uid,
+                    completion: null,
+                })
+                }catch(error){
+                    console.log(error)
+                }
             }
         },
 
@@ -158,6 +178,7 @@ export default{
             })
         },
 
+        //marks an item as completed, shows undo button
         async complete(id){
             try{
                     toDoLists.doc(id).update({
@@ -169,6 +190,7 @@ export default{
             }
         },
 
+        //marks an item as incomplete, shows complete button
         async unComplete(id){
             try{
                     toDoLists.doc(id).update({
@@ -238,19 +260,27 @@ export default{
     }
 
     #my-list{
-    justify-content: center;
-    width: auto;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 2em;
+        justify-content: center;
+        width: auto;
+        display: grid;
+        grid-template-columns: auto auto auto;
+        gap: 2em;
     }
 
-    #list-item{
+    .list-item{
         width: 16em;
         height: auto;
         background-color: #fafafa;
         border-radius: 8%;
         padding: 1em;
+    }
+
+    .hide{
+        display: none;
+    }
+
+    .show{
+        display: initial;
     }
 
     .compButton{
@@ -303,7 +333,7 @@ export default{
     }
 
     @media screen and (max-width: 650px){
-        #list-item{
+        .list-item{
             width: 8em;
         }
     }

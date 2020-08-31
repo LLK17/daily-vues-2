@@ -81,6 +81,10 @@
         margin: .6em
     }
 
+    #sign-out{
+        background-color: darkgrey;
+    }
+
     @media screen and (max-width: 500px){
         #site-name{
             margin-left: .6em;

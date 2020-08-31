@@ -9,6 +9,7 @@ Vue.config.productionTip = false
 
 Vue.use(firestorePlugin)
 
+//render the app if a user is found
 firebase.auth().onAuthStateChanged(user =>{
   if(user) {
       console.log(user.email)
