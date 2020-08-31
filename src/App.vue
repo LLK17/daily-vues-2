@@ -18,6 +18,14 @@ export default {
 </script>
 
 <style>
+  a{
+    text-decoration: none;
+  }
+
+  a:visited{
+    color: black
+  }
+
  #app{
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

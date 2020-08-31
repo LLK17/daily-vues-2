@@ -8,20 +8,21 @@
                     <div id="form-categories">
                         <!-- Categories are used for filtering -->
                         <p>Categories</p>
-                        <input type="radio" name="Health" v-model="formData.health" value="Health"> Health
-                        <input type="radio" name="Fun" v-model="formData.fun" value="Fun"> Fun
-                        <input type="radio" name="Work" v-model="formData.work" value="Work"> Work
-                        <input type="radio" name="School" v-model="formData.school" value="School"> School
+                        <input type="checkbox" name="Health" v-model="formData.health" value="Health"> Health
+                        <input type="checkbox" name="Fun" v-model="formData.fun" value="Fun"> Fun
+                        <input type="checkbox" name="Work" v-model="formData.work" value="Work"> Work
+                        <input type="checkbox" name="School" v-model="formData.school" value="School"> School
                     </div>
                     <input type="date" name="Due Date" v-model="formData.dueDate">
                     <button type="submit">Submit!</button>
                 </form>
-                <h4>Filters</h4>
+
                 <form id="filters" @submit.prevent="runFilter">
-                    <input type="radio" name="Health" v-model="filter.health" value="Health"> Health
-                    <input type="radio" name="Fun" v-model="filter.fun" value="Fun"> Fun
-                    <input type="radio" name="Work" v-model="filter.work" value="Work"> Work
-                    <input type="radio" name="School" v-model="filter.school" value="School"> School
+                    <p>Filters</p>
+                    <input type="checkbox" name="Health" v-model="filter.health" value="Health"> Health
+                    <input type="checkbox" name="Fun" v-model="filter.fun" value="Fun"> Fun
+                    <input type="checkbox" name="Work" v-model="filter.work" value="Work"> Work
+                    <input type="checkbox" name="School" v-model="filter.school" value="School"> School
                     <button type="submit">Fitler!</button>
                 </form>
             </div>
@@ -30,7 +31,7 @@
                 <div id="list-container">
                     <h3>My List</h3>
                     <div id="my-list">
-                        <div id="list-item" v-show="(showHealth == true || showFun == true || showWork == true || showSchool == true)" v-for="(listData) in myList" :key='listData.id'>
+                        <div id="list-item" v-for="(listData) in myList" :key='listData.id'>
                             <span class="title">{{listData.title}}</span> <span class="completion-marker" v-show="listData.completion !== null">(Done!)</span>
                             <br>
                             <p class="description">{{listData.description}}</p>
@@ -42,8 +43,8 @@
                             <br>
                             <span class="category">Due: {{listData.dueDate}}</span>
                             <br>
-                            <button v-show="listData.completion == null" v-on:click="complete(listData.id)">Complete!</button>
-                            <button v-show="listData.completion !== null" v-on:click="unComplete(listData.id)">Undo Complete</button>
+                            <button class="compButton" v-show="listData.completion == null" v-on:click="complete(listData.id)">Complete!</button>
+                            <button class="compButton" v-show="listData.completion !== null" v-on:click="unComplete(listData.id)">Undo Complete</button>
                             <br>
                             <button id="delete" v-on:click="deleteItem(listData.id)">Delete Item</button>
                         </div>
@@ -60,6 +61,7 @@ import Navbar from './Navbar'
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
+//the collection of list items in firebase
 const toDoLists = db.collection('lists')
 
 export default{
@@ -72,17 +74,16 @@ export default{
             myList: [],
             formData: {},
             done: [],
-            filter: [],
+            filter: {
+                health : true,
+                fun : true,
+                work : true,
+                school : true,
+            },
             user: [],
-            showHealth: true,
-            showFun: true,
-            showWork: true,
-            showSchool:true,
             }
     },
-
-    //grabs items that the current user authored from firebase
-
+//grabs items that the current user authored from firebase inside each of these methods
     mounted(){
         firebase.auth().onAuthStateChanged(user => {
             if(user){
@@ -103,6 +104,10 @@ export default{
         })      
     },
 
+    // computed(){
+
+    // },
+
     firestore(){
         let user = firebase.auth().currentUser
         return {
@@ -115,11 +120,11 @@ export default{
         //Item filtering
         runFilter(){
             try{
-                // let showHealth = 
-                console.log()
-        
-                
-
+                let input = this.filter
+                console.log(input)
+                return{
+                    input
+                }
             }catch(error){
                 console.log(error)
             }
@@ -187,6 +192,7 @@ export default{
         width: 20em;
         height: auto;
         display: grid;
+        gap: 6em 0;
         grid-template-columns: 100%;
         padding: 1em;
         background-color: #fafafa;
@@ -241,8 +247,13 @@ export default{
         padding: 1em;
     }
 
+    .compButton{
+        margin-top: 1em
+    }
+
     #delete{
         background-color: darkgrey;
+        margin-top: 1em;
     }
 
 </style>

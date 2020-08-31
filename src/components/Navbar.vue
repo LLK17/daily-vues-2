@@ -1,6 +1,6 @@
 <template>
     <div id="nav">
-        <router-link to="/"> <span id="site-name">Daily Vues 2(this one actually does stuff!)</span> </router-link>
+        <span id="site-name"><router-link to="/">Daily Vues 2</router-link></span>
         <div id="links">
             <span v-if="loggedIn"> Good To See You |</span>
             <router-link class="link" to="/home">Home</router-link>
@@ -68,7 +68,7 @@
     
     #site-name{
         justify-self: left !important;
-        margin-left: 2em;
+        margin-left: 4em;
         font-weight: 700;
         text-decoration: none;
     }
