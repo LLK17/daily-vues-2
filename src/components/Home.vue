@@ -23,7 +23,7 @@
                     <input type="checkbox" name="Fun" v-model="filter.fun" value="Fun"> Fun
                     <input type="checkbox" name="Work" v-model="filter.work" value="Work"> Work
                     <input type="checkbox" name="School" v-model="filter.school" value="School"> School
-                    <button type="submit">Fitler!</button>
+                    <button id="filter-button" type="submit">Fitler!</button>
                 </form>
             </div>
 
@@ -192,7 +192,7 @@ export default{
         width: 20em;
         height: auto;
         display: grid;
-        gap: 6em 0;
+        gap: 5em 0;
         grid-template-columns: 100%;
         padding: 1em;
         background-color: #fafafa;
@@ -200,9 +200,24 @@ export default{
     }
 
     #new-item-form{
-    width: 100%;
-    display: grid;
-    gap: 1em 0;
+        width: 100%;
+        display: grid;
+        gap: 1em 0;
+    }
+
+    #title-field{
+        margin-bottom: 1em;
+    }
+
+    #description-field{
+    height: 6em;
+    resize: none;
+    }
+
+    #filter-button{
+        width: 100%;
+        margin-top: 1em;
+        margin-bottom: 1em;
     }
 
     .description{
@@ -216,15 +231,6 @@ export default{
 
     .completion-marker{
         color: #4ff0a7
-    }
-
-    #title-field{
-    margin-bottom: 1em;
-    }
-
-    #description-field{
-    height: 6em;
-    resize: none;
     }
 
     #list-container{
@@ -254,6 +260,52 @@ export default{
     #delete{
         background-color: darkgrey;
         margin-top: 1em;
+    }
+
+    @media screen and (max-width: 1660px){
+        #my-list{
+            grid-template-columns: auto auto;
+        }
+    }
+
+    @media screen and (max-width: 1340px){
+        #my-list{
+            justify-content: right;
+        }
+    }
+
+    @media screen and (max-width: 768px){
+        #sidebar{
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            grid-template-columns: auto auto;
+            position: static;
+            border-radius: 0 0 4% 4%;
+        }
+
+        #list-container{
+            margin-top: 1em;
+        }
+        
+        #my-list{
+            justify-content: center;
+        }
+
+        #filters{
+            align-self: end;
+        }
+
+        #filter-button{
+            width: 90%;
+            margin-bottom: 0;
+        }
+    }
+
+    @media screen and (max-width: 650px){
+        #list-item{
+            width: 8em;
+        }
     }
 
 </style>
