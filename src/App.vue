@@ -38,6 +38,7 @@ export default {
 
  body{
    margin: 0;
+   margin-bottom: 4em;
  }
 
  button{

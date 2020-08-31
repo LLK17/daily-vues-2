@@ -2,11 +2,11 @@
     <div id="nav">
         <span id="site-name"><router-link to="/">Daily Vues 2</router-link></span>
         <div id="links">
-            <span v-if="loggedIn"> Good To See You |</span>
+            <span v-if="loggedIn"> Good To See You!</span>
             <router-link class="link" to="/home">Home</router-link>
             <router-link v-if="!loggedIn" class="link" to="/login">Login</router-link> 
             <router-link v-if="!loggedIn" class="link" to="register">Register</router-link>
-            <button v-if="loggedIn" @click="signOut">Sign Out</button> 
+            <button id="sign-out" v-if="loggedIn" @click="signOut">Sign Out</button> 
         </div>
     </div>
 </template>
@@ -59,7 +59,6 @@
        height: 4em;
        display: grid;
        grid-template-columns: auto auto;
-       /* justify-items: right; */
        align-items: center;
        background-color: #4ff0a7;
        position: fixed;
@@ -80,5 +79,16 @@
 
     .link{
         margin: .6em
+    }
+
+    @media screen and (max-width: 500px){
+        #site-name{
+            margin-left: .6em;
+        }
+
+        #links{
+            margin-right: .6em;
+        }
+
     }
 </style>
