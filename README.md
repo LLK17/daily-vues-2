@@ -1,7 +1,7 @@
+# daily-vues-2
+
 ## Live Site
 https://daily-vues-2.web.app/
-
-# daily-vues-2
 
 ## Project setup
 ```
